@@ -17,4 +17,14 @@ best <- function(state, outcome) {
     else {stop("invalid outcome")}
     thirtyMort <- as.numeric(thirtyMort)
     thirtyMort ## where I am: thirtyMort is thirty-day mortality vector for specific outcome
+    
+    ## now check validity of the state
+    stateLogIdx <- outcomeData$State==state # stateLogIdx is logical-idx of desired state
+    if(length(outcomeData[stateLogIdx,]$State)==0) {
+        stop("invalid state")
+    }
+    
+    hospitals <- outcomeData[stateLogIdx,]$Hospital.Name ## not going to be in solution
+    
+    hospitals ## just returns the hospitals in state in question
 }
