@@ -24,7 +24,14 @@ best <- function(state, outcome) {
         stop("invalid state")
     }
     
-    hospitals <- outcomeData[stateLogIdx,]$Hospital.Name ## not going to be in solution
+    hospNames <- outcomeData[stateLogIdx,]$Hospital.Name
+    outies <- thirtyMort[stateLogIdx]
     
-    hospitals ## just returns the hospitals in state in question
+    # make a frame of hosp names and mortalities, exclude na's
+    stateFrame <- data.frame(hospNames[!is.na(outies)],outies[!is.na(outies)])
+    minimumMort <- min(stateFrame$outies[!is.na(stateFrame$outies)]) # for reference
+    
+    hospitals <- stateFrame$hospNames[stateFrame$outies==minimumMort]
+    
+    min(as.character(hospitals)) ## just returns the hospitals in state in question
 }
