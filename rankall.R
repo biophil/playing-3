@@ -26,8 +26,26 @@ rankall <- function(outcome, num = "best") {
     
     splitted <- split(outcomeData[,c("Hospital.Name",outcome)],states)
     
-    for(state in levels(states)) {
-        splitted[[state]] <- splitted[[state]][order(splitted[[state]][[outcome]],splitted[[state]][["Hospital.Name"]]),]
+    ## now check validity of num and make it numeric
+    if(!is.numeric(num)){
+        if(num=="best") {
+            num <- 1
+        }
+        else if(num!="worst") {
+            stop("invalid num")
+        }
     }
-    splitted
+    
+    state <- levels(states)
+    hospital <- character()
+    for(sn in state) {
+        splitted[[sn]] <- splitted[[sn]][order(splitted[[sn]][[outcome]],splitted[[sn]][["Hospital.Name"]]),]
+        thisnum <- num
+        if(thisnum=="worst"){
+            thisnum <- nrow(splitted[[sn]])
+        }
+        hospital <- append(hospital,splitted[[sn]][thisnum,"Hospital.Name"])
+    }
+    to.return <- data.frame(hospital,state)
+    to.return
 }
